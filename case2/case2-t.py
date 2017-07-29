@@ -21,7 +21,8 @@ g = igraph.Graph.Read_Ncol(Facebook, directed=False)
 #g = igraph.Graph.Adjacency(A)
 community_walktrap_start_time = time.time()
 com5=g.community_walktrap()
-print("--- %s seconds ---" % (time.time() - community_walktrap_start_time))
+print("Community Walktrap  Run Time:--- %s seconds ---" % (time.time() - community_walktrap_start_time))
+print("Community Walktrap Number Of Communities",com5.optimal_count)
 community_walktrap_clusters=com5.as_clustering()
 community_walktrap_membership=community_walktrap_clusters.membership
 print("Community Walktrap Modularity", g.modularity(community_walktrap_membership))
@@ -29,18 +30,22 @@ print("Community Walktrap Modularity", g.modularity(community_walktrap_membershi
 
 community_fastgreedy_start_time = time.time()
 com6=g.community_fastgreedy()
-print("--- %s seconds ---" % (time.time() - community_fastgreedy_start_time))
+print("Community Fastgreedy  Run Time:--- %s seconds ---" % (time.time() - community_fastgreedy_start_time))
+print("Community Fastgreedy Number Of Communities",com6.optimal_count)
+
 community_fastgreedy_clusters=com6.as_clustering()
 community_fastgreedy_membership=community_fastgreedy_clusters.membership
-print("Community Walktrap Modularity", g.modularity(community_fastgreedy_membership))
+print("Community Fastgreedy Modularity", g.modularity(community_fastgreedy_membership))
 
-community_spinglass_start_time = time.time()
-com7=g.community_spinglass()
-print("--- %s seconds ---" % (time.time() - community_spinglass_start_time))
 
-community_spinglass_clusters=com7.as_clustering()
-community_spinglass_membership=community_spinglass_clusters.membership
-print("Community Walktrap Modularity", g.modularity(community_spinglass_membership))
+community_leading_eigenvector_start_time = time.time()
+com7=g.community_leading_eigenvector()
+print("Community Leading Eigenvector Run Time:--- %s seconds ---" % (time.time() - community_leading_eigenvector_start_time))
+print("Community Leading Eigenvector Number Of Communities",com7.optimal_count)
+
+#community_spinglass_clusters=com7.as_clustering()
+community_leading_eigenvector_membership=com7.membership
+print("Community Leading Eigenvector Modularity", g.modularity(community_leading_eigenvector_membership))
 #print(com5.optimal_count)
 #print(com5.as_clustering())
 
