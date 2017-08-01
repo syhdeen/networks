@@ -1,8 +1,7 @@
-import community.community_louvain as community
-import networkx as nx
-import matplotlib.pyplot as plt
-import igraph
+#import cairocffi as cairo
+from igraph import *
 import time
+import matplotlib.pyplot as plt
 
 
 #better with karate_graph() as defined in networkx example.
@@ -13,56 +12,66 @@ import time
 Facebook = "facebook/facebook_combined.txt"
 WikiVote = "wiki-vote/Wiki-Vote.txt"
 
-G = nx.read_edgelist(Facebook)
 g = igraph.Graph.Read_Ncol(Facebook, directed=False)
+
+#G1 = nx.Graph(g)
+
 #g1 = igraph.Graph(len(G), zip(*zip(*nx.to_edgelist(G))[:2]))
-#g1 = igraph.Graph.Adjacency((nx.to_numpy_matrix(G) > 0).tolist())
 
 #g = igraph.Graph.Adjacency(A)
 community_walktrap_start_time = time.time()
-com5=g.community_walktrap()
-print("Community Walktrap  Run Time:--- %s seconds ---" % (time.time() - community_walktrap_start_time))
-print("Community Walktrap Number Of Communities",com5.optimal_count)
-community_walktrap_clusters=com5.as_clustering()
-community_walktrap_membership=community_walktrap_clusters.membership
-print("Community Walktrap Modularity", g.modularity(community_walktrap_membership))
+walktrap_communities=g.community_walktrap()
+print("Latapy & Pons random walks Algorithm Run Time:--- %s seconds ---" % (time.time() - community_walktrap_start_time))
+print("Latapy & Pons random walks Algorithm Number Of Communities",walktrap_communities.optimal_count)
+community_walktrap_clusters = walktrap_communities.as_clustering()
+community_walktrap_membership = community_walktrap_clusters.membership
+print("Latapy & Pons random walks Algorithm Modularity", g.modularity(community_walktrap_membership))
 
 
 community_fastgreedy_start_time = time.time()
-com6=g.community_fastgreedy()
-print("Community Fastgreedy  Run Time:--- %s seconds ---" % (time.time() - community_fastgreedy_start_time))
-print("Community Fastgreedy Number Of Communities",com6.optimal_count)
-
-community_fastgreedy_clusters=com6.as_clustering()
-community_fastgreedy_membership=community_fastgreedy_clusters.membership
-print("Community Fastgreedy Modularity", g.modularity(community_fastgreedy_membership))
+fastgreedy_communities = g.community_fastgreedy()
+print("Fast Greedy Algorithm  Run Time:--- %s seconds ---" % (time.time() - community_fastgreedy_start_time))
+print("Fast Greedy Algorithm Number Of Communities",fastgreedy_communities.optimal_count)
+community_fastgreedy_clusters = fastgreedy_communities.as_clustering()
+community_fastgreedy_membership = community_fastgreedy_clusters.membership
+print("Fast Greedy Algorithm Modularity", g.modularity(community_fastgreedy_membership))
 
 
 community_leading_eigenvector_start_time = time.time()
-com7=g.community_leading_eigenvector()
-print("Community Leading Eigenvector Run Time:--- %s seconds ---" % (time.time() - community_leading_eigenvector_start_time))
-print("Community Leading Eigenvector Number Of Communities",com7.optimal_count)
-
-#community_spinglass_clusters=com7.as_clustering()
-community_leading_eigenvector_membership=com7.membership
-print("Community Leading Eigenvector Modularity", g.modularity(community_leading_eigenvector_membership))
-#print(com5.optimal_count)
-#print(com5.as_clustering())
+leading_eigenvector_communities=g.community_leading_eigenvector()
+print("Newman's leading eigenvector  Run Time:--- %s seconds ---" % (time.time() - community_leading_eigenvector_start_time))
+#print("Community Leading Eigenvector Number Of Communities",com7.optimal_count)
+community_leading_eigenvector_membership=leading_eigenvector_communities.membership
+print("Newman's leading eigenvector method Modularity", g.modularity(community_leading_eigenvector_membership))
 
 
+community_leading_eigenvector_start_time = time.time()
+leading_eigenvector_communities=g.community_optimal_modularity()
+print("Newman's leading eigenvector  Run Time:--- %s seconds ---" % (time.time() - community_leading_eigenvector_start_time))
+#print("Community Leading Eigenvector Number Of Communities",com7.optimal_count)
+community_leading_eigenvector_membership=leading_eigenvector_communities.membership
+print("Newman's leading eigenvector method Modularity", g.modularity(community_leading_eigenvector_membership))
 
-#communities = g1.community_edge_betweenness()
 
-# not really sure what to do next
-#num_communities = communities.optimal_count
-#print(num_communities)
-#communities.as_clustering(num_communities)
-#igraph.Graph.GraphBase.modularity(g, com7) 
-#print(g.modularity(com6))
-part = community.best_partition(G)
-values = [part.get(node) for node in G.nodes()]
-mod = community.modularity(part,G)
-print("modularity:", mod)
+
+
+
+
+
+
+
+
+
+
+#layout = g.layout("kk")
+#igraph.plot(leading_eigenvector_communities, mark_groups = True)
+#visual_style = {}        
+# Plot the graph
+#igraph.plot(g, **visual_style)
+
+
+
+
 #fig=plt.figure(1,figsize=(18,18))
 #title = " network" 
 #fig.clf()
