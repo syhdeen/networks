@@ -131,7 +131,19 @@ def recommend(user,num_of_recommendation):
   print('Recommend',num_of_recommendation,'products for user',user)
   sim_neighbors()
   prediction()
+  user_preditions=defaultdict(list)
+
   #select top rating in predictions_for_recommendation
+  for (userid,product), rat in predictions_for_recommendation.items():
+    if userid == user:
+      user_preditions[user,product].append(rat)
+  recommendations = dict(sorted(user_preditions.items(), key=operator.itemgetter(1), reverse=True)[:5])
+  print( product   for (userid,product), rat in recommendations.items())
+
+
+
+
+
 
 
 
