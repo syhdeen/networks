@@ -65,12 +65,12 @@ def Kroneker_network(num_nodes, initiator=np.random.randint(2, size=(2, 2))):
 
 
 def Price_Model(num_nodes):
-	dendogram={}
+	dendrogram={}
 	citations=0 
 	a = 1
 	for i in range(num_nodes):
-		dendogram[i] = []  
-		for node in dendogram.values():
+		dendrogram[i] = []  
+		for node in dendrogram.values():
 			qi=len(node)
 			current_num_nodes=i
 			pref_attach_prob =  (qi + a) / (current_num_nodes  +(citations+a ))
@@ -78,7 +78,7 @@ def Price_Model(num_nodes):
 				node.append(i)
 				citations += 1
 
-	G = nx.DiGraph(dendogram)
+	G = nx.DiGraph(dendrogram)
 	return G
 
 

@@ -31,40 +31,10 @@ sccg=G.subgraph(scc)
 bowtie = list(scc)+IN_comp+OUT_comp
 G_bowtie = G.subgraph(bowtie)
 
-pos={}
-in_y=100
-
-in_step=1.
-for in_n in IN_comp:
-	pos[in_n]=(100.,in_y)
-	in_y=in_y+in_step
-
-out_y=100.
-out_step=1.
-
-for out_n in OUT_comp:
-	pos[out_n]=(500.,out_y)
-	out_y=out_y+out_step
-
-
-
-x = [random.randint(0,400) for i in range(0,len(scc))]
-y = [random.randint(0,400) for i in range(0,len(scc))]
-x = np.array(x)
-y = np.array(y)
-
-for i in scc:
-	pos[i] =  random.choice(x)+100,random.choice(y)
-	print(pos[i])
-
-
-fig=plt.figure(1,figsize=(18,18))
-title = " network"
-fig.clf()
 IN_compg=G.subgraph(IN_comp)
 OUT_compg=G.subgraph(OUT_comp)
 pos1=nx.spring_layout(IN_compg)
-pos2=nx.spring_layout(sccg)
+pos2=nx.circular_layout(sccg)
 pos3=nx.spring_layout(OUT_compg)
 
 for k,v in pos2.items():
@@ -78,11 +48,16 @@ for k,v in pos3.items():
 pos4 = pos1.copy()
 pos4.update(pos2)
 pos4.update(pos3)
-nx.draw(G_bowtie,pos4)
-nx.draw_networkx_nodes(G_bowtie,pos4,IN_compg,node_size=30,node_color='grey')
-nx.draw_networkx_nodes(G_bowtie,pos4,sccg,node_size=50)
-nx.draw_networkx_nodes(G_bowtie,pos4,OUT_compg,node_size=30,node_color='grey')
 
+fig=plt.figure(1,figsize=(18,18))
+title = " Bow-Tie Structure for Wiki Vote"
+fig.clf()
+nx.draw(G_bowtie,pos4,IN_comp,node_size=5, node_color="grey")
+nx.draw(G_bowtie,pos4,scc,node_size=5)
+nx.draw(G_bowtie,pos4,OUT_comp,node_size=5, node_color="grey")
+
+plt.title(title)
 
 plt.show() # display
-plt.draw()
+plt.waitforbuttonpress()
+
