@@ -91,9 +91,7 @@ def sim_neighbors():
 def prediction():
 
     for user,neighbor in neighbors.items():
-    	print(neighbors[user])         
     	mean_user_rating=statistics.mean(ratings_by_user[user])
-    	print(mean_user_rating)
 
     	if len(neighbor) >0:	
     		for i in range(0,len(neighbor)-1):
@@ -116,9 +114,7 @@ def prediction():
    				 				neighbor_sim=cos_sim[user,neighbor[j]]
 
    				 			numerator = numerator + (neighbor_sim * (rating[neighbor[j],product] - statistics.mean(ratings_by_user[neighbor[i]])))
-   				 			print(numerator)
    				 			denominator =denominator + neighbor_sim
-   				 			print(denominator)
    				 	predicted_rating=mean_user_rating+(numerator/denominator)
    				 	if (product not in products_by_user[user]):
    				 		predictions_for_recommendation[user,product]= predicted_rating
@@ -127,18 +123,15 @@ def prediction():
 
 
     print(predictions)
-    failures=0
-    squared_error=0
-    for user,product in rating:
-    	try:
-    		
-    		squared_error += ((predictions[user, product] ))
-    	except KeyError:
-    		failures += 1
-    	
-    RMSE = math.sqrt(squared_error/1)
+    
+
 
 	
+def recommend(user,num_of_recommendation):
+  print('Recommend',num_of_recommendation,'products for user',user)
+  sim_neighbors()
+  prediction()
+  #select top rating in predictions_for_recommendation
 
 
 
@@ -148,7 +141,7 @@ def prediction():
 
 
 def main():
-	initiation('epinions/rating.txt')
-	sim_neighbors()
-	prediction()
+  initiation('epinions/rating.txt')
+  recommend(1,5)
+
 main()
